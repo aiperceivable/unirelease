@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **CLI shell** with Cobra: `unirelease [path]` with `--dry-run`, `--yes`, `--step`, `--type`, `--version` flags
+- **CLI shell** with Cobra: `unirelease [path]` with `--dry-run`, `--yes`, `--step`, `--type`, `--set-version`, `--version` flags
 - **Auto-detection** of project type from manifest files (Cargo.toml, go.mod, package.json, pyproject.toml)
 - **Detection priority**: Rust (100) > Go (95) > Python (90) > Bun (80) > Node (50), overridable with `--type`
 - **11-step pipeline**: detect → read_version → verify_env → check_git_status → clean → build → test → verify → git_tag → github_release → publish
@@ -31,4 +31,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Summary report**: step results + remote status checks (git tag, GitHub Release, registry) after pipeline
 - **Colored output**: step progress, success/warning/error messages, boxed summary
 - **Cross-platform**: Windows (cmd /c) and Unix (sh -c) command execution
-- **182 tests** across 10 packages: unit tests, git integration tests (temp bare repos), GitHub API tests (httptest mock), pipeline step tests, E2E dry-run tests for all 5 project types
+- **183 tests** across 10 packages: unit tests, git integration tests (temp bare repos), GitHub API tests (httptest mock), pipeline step tests, E2E dry-run tests for all 5 project types

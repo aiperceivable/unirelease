@@ -85,7 +85,7 @@ func (c *Config) validate() error {
 	if c.Type != "" {
 		valid := map[string]bool{"rust": true, "node": true, "bun": true, "python": true, "go": true}
 		if !valid[c.Type] {
-			return fmt.Errorf("invalid type %q; must be one of: rust, node, bun, python", c.Type)
+			return fmt.Errorf("invalid type %q; must be one of: rust, node, bun, python, go", c.Type)
 		}
 	}
 

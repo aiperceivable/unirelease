@@ -288,10 +288,26 @@ func TestBunVerify_ReturnsErrNoPublish(t *testing.T) {
 
 func TestPythonVerify_DryRun(t *testing.T) {
 	dir := t.TempDir()
+	// Verify needs dist files to glob (fixed: no longer passes literal "dist/*")
+	os.MkdirAll(filepath.Join(dir, "dist"), 0755)
+	os.WriteFile(filepath.Join(dir, "dist", "myapp-0.1.0.tar.gz"), []byte("pkg"), 0644)
+
 	ctx, _ := newMockContext(dir)
 	p := &PythonProvider{}
 	if err := p.Verify(ctx); err != nil {
 		t.Errorf("unexpected error: %v", err)
+	}
+}
+
+func TestPythonVerify_NoDistFiles(t *testing.T) {
+	dir := t.TempDir()
+	os.MkdirAll(filepath.Join(dir, "dist"), 0755) // empty dist
+
+	ctx, _ := newMockContext(dir)
+	p := &PythonProvider{}
+	err := p.Verify(ctx)
+	if err == nil {
+		t.Fatal("expected error for empty dist/")
 	}
 }
 

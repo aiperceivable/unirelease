@@ -1,0 +1,19 @@
+# Build output
+dist/
+unirelease
+*.exe
+
+# Go
+*.test
+*.out
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

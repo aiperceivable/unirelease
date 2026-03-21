@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/BurntSushi/toml"
 	"github.com/aipartnerup/unirelease/internal/pipeline"
 )
 
@@ -126,7 +127,21 @@ func (p *PythonProvider) Publish(ctx *pipeline.Context) error {
 }
 
 func (p *PythonProvider) Verify(ctx *pipeline.Context) error {
-	_, err := ctx.Runner.Run("twine", "check", "dist/*")
+	distDir := filepath.Join(ctx.ProjectDir, "dist")
+	patterns := []string{
+		filepath.Join(distDir, "*.whl"),
+		filepath.Join(distDir, "*.tar.gz"),
+	}
+	var files []string
+	for _, pattern := range patterns {
+		matches, _ := filepath.Glob(pattern)
+		files = append(files, matches...)
+	}
+	if len(files) == 0 {
+		return fmt.Errorf("no distribution files in dist/; run build first")
+	}
+	args := append([]string{"check"}, files...)
+	_, err := ctx.Runner.Run("twine", args...)
 	return err
 }
 
@@ -162,15 +177,17 @@ func (p *PythonProvider) RegistryCheck(ctx *pipeline.Context) (bool, error) {
 }
 
 func readPyprojectName(projectDir string) string {
-	cmd := exec.Command("grep", "-E", `^name = `, "pyproject.toml")
-	cmd.Dir = projectDir
-	out, err := cmd.Output()
+	data, err := os.ReadFile(filepath.Join(projectDir, "pyproject.toml"))
 	if err != nil {
 		return ""
 	}
-	s := string(out)
-	s = s[len("name = "):]
-	s = strings.TrimSpace(s)
-	s = strings.Trim(s, `"`)
-	return s
+	var pyproject struct {
+		Project struct {
+			Name string `toml:"name"`
+		} `toml:"project"`
+	}
+	if toml.Unmarshal(data, &pyproject) != nil {
+		return ""
+	}
+	return pyproject.Project.Name
 }

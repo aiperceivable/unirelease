@@ -4,21 +4,24 @@ Unified release pipeline for multi-language projects. One command to detect, bui
 
 **Zero config required.** Drop into any project directory and run `unirelease`. It auto-detects the project type from manifest files and runs the right pipeline.
 
+## Install
+
+```bash
+# One-line installer (auto-detects OS/arch)
+curl -sSL https://raw.githubusercontent.com/aipartnerup/unirelease/main/scripts/install.sh | bash
+
+# Or via Go
+go install github.com/aipartnerup/unirelease@latest
+```
+
+Also available as pre-built binaries and Docker. See [docs/releasing.md](docs/releasing.md) for all methods + CI/CD integration.
+
 ## Quick Start
 
 ```bash
-# Install
-go install github.com/aipartnerup/unirelease@latest
-
-# Release your project
-cd /path/to/your/project
-unirelease
-
-# Preview without executing anything
-unirelease --dry-run
-
-# Non-interactive mode (CI/CD)
-unirelease --yes
+unirelease              # auto-detect + full pipeline
+unirelease --dry-run    # preview without executing
+unirelease --yes        # non-interactive (CI/CD)
 ```
 
 ## Supported Languages
@@ -62,7 +65,8 @@ Flags:
   --dry-run          Preview pipeline without executing
   --step <name>      Run only a specific step
   --type <type>      Override auto-detection (rust|go|node|bun|python)
-  -v, --version <X.Y.Z>  Override detected version
+  -v, --version           Print version
+  -V, --set-version <X.Y.Z>  Override detected version
   -y, --yes          Non-interactive mode (skip confirmations)
 ```
 
@@ -76,7 +80,7 @@ unirelease --dry-run
 unirelease /path/to/project
 
 # Override detected version
-unirelease --version 2.0.0
+unirelease --set-version 2.0.0
 
 # Run only the build step
 unirelease --step build
@@ -139,7 +143,7 @@ Each language reads version from its standard manifest:
 | Language | Source | Example |
 |----------|--------|---------|
 | Rust | `Cargo.toml` → `[package] version` | `version = "1.2.3"` |
-| Go | `VERSION` file (or `--version` flag) | `1.2.3` |
+| Go | `VERSION` file (or `--set-version` flag) | `1.2.3` |
 | Node/Bun | `package.json` → `version` | `"version": "1.2.3"` |
 | Python | `pyproject.toml` → `[project] version` | `version = "1.2.3"` |
 
@@ -269,7 +273,7 @@ unirelease/
 ## Development
 
 ```bash
-# Run all tests (182 tests across 10 packages)
+# Run all tests (183 tests across 10 packages)
 go test ./...
 
 # Run with verbose output
@@ -287,4 +291,4 @@ go build -o unirelease .
 
 ## License
 
-MIT
+Apache-2.0

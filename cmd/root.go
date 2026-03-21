@@ -43,11 +43,16 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 }
 
+// SetVersion sets the version string displayed by --version.
+func SetVersion(v string) {
+	rootCmd.Version = v
+}
+
 func init() {
 	rootCmd.Flags().StringVar(&flagStep, "step", "", "Run only a specific pipeline step")
 	rootCmd.Flags().BoolVarP(&flagYes, "yes", "y", false, "Non-interactive mode (skip confirmations)")
 	rootCmd.Flags().BoolVar(&flagDryRun, "dry-run", false, "Preview pipeline without executing")
-	rootCmd.Flags().StringVarP(&flagVersion, "version", "v", "", "Override detected version")
+	rootCmd.Flags().StringVarP(&flagVersion, "set-version", "V", "", "Override detected version (e.g. 1.2.3)")
 	rootCmd.Flags().StringVar(&flagType, "type", "", "Override auto-detection (rust|node|bun|python|go)")
 }
 
@@ -181,13 +186,7 @@ func runRelease(cmd *cobra.Command, args []string) error {
 		&steps.PublishStep{},
 	}
 
-	// The detect step sets ctx.Provider, but we need a resolve step.
-	// We wrap the detect step to also resolve the provider.
-	// Actually, the detect step sets ctx.ProjectType. We resolve provider after detect.
-	// Let's use a custom step wrapper. Better: use a ProviderResolveStep after detect.
-	// Simplest: override the detect step to also resolve provider.
-
-	// Create engine with a provider-resolving wrapper
+	// Wrap detect step to also resolve the provider after detection
 	wrappedSteps := make([]pipeline.Step, len(allSteps))
 	copy(wrappedSteps, allSteps)
 	wrappedSteps[0] = &detectAndResolveStep{inner: allSteps[0].(*steps.DetectStep)}

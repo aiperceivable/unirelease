@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"os/exec"
-	"strings"
+	"path/filepath"
 
+	"github.com/BurntSushi/toml"
 	"github.com/aipartnerup/unirelease/internal/pipeline"
 )
 
@@ -85,16 +87,17 @@ func (p *RustProvider) RegistryCheck(ctx *pipeline.Context) (bool, error) {
 }
 
 func readCargoName(projectDir string) string {
-	cmd := exec.Command("grep", "-E", `^name = `, "Cargo.toml")
-	cmd.Dir = projectDir
-	out, err := cmd.Output()
+	data, err := os.ReadFile(filepath.Join(projectDir, "Cargo.toml"))
 	if err != nil {
 		return ""
 	}
-	// name = "foo"
-	s := string(out)
-	s = s[len("name = "):]
-	s = strings.TrimSpace(s)
-	s = strings.Trim(s, `"`)
-	return s
+	var cargo struct {
+		Package struct {
+			Name string `toml:"name"`
+		} `toml:"package"`
+	}
+	if toml.Unmarshal(data, &cargo) != nil {
+		return ""
+	}
+	return cargo.Package.Name
 }
