@@ -3,7 +3,7 @@ package steps
 import (
 	"fmt"
 
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 type PublishStep struct{}

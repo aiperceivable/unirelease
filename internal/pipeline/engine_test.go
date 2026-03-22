@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/aipartnerup/unirelease/internal/config"
-	"github.com/aipartnerup/unirelease/internal/ui"
+	"github.com/aiperceivable/unirelease/internal/config"
+	"github.com/aiperceivable/unirelease/internal/ui"
 )
 
 // mockStep implements Step for testing.

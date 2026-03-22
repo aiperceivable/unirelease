@@ -3,10 +3,10 @@ package steps
 import (
 	"fmt"
 
-	"github.com/aipartnerup/unirelease/internal/changelog"
-	"github.com/aipartnerup/unirelease/internal/git"
-	gh "github.com/aipartnerup/unirelease/internal/github"
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/changelog"
+	"github.com/aiperceivable/unirelease/internal/git"
+	gh "github.com/aiperceivable/unirelease/internal/github"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 type GitHubReleaseStep struct{}

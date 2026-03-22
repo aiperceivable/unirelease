@@ -13,7 +13,7 @@
 ## Tasks (TDD Order)
 
 ### Task 1: Initialize Go module and project skeleton
-- `go mod init github.com/aipartnerup/unirelease`
+- `go mod init github.com/aiperceivable/unirelease`
 - Create directory structure: `cmd/`, `internal/detector/`
 - Add cobra dependency: `go get github.com/spf13/cobra`
 - Add toml dependency: `go get github.com/BurntSushi/toml`

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 func TestGoProvider_Name(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 // NodeProvider implements Provider for Node.js projects.

@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 // ForType returns the provider for a given project type string.

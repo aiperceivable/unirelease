@@ -130,11 +130,11 @@ else
   echo "[7/7] Pushing tag (GoReleaser will handle the release)..."
   git push origin HEAD "$TAG"
   echo "  Pushed. GitHub Actions will build and release."
-  echo "  Watch: https://github.com/aipartnerup/unirelease/actions"
+  echo "  Watch: https://github.com/aiperceivable/unirelease/actions"
 fi
 
 echo ""
 echo "==> Release ${TAG} complete!"
 echo ""
 echo "Verify:"
-echo "  https://github.com/aipartnerup/unirelease/releases/tag/${TAG}"
+echo "  https://github.com/aiperceivable/unirelease/releases/tag/${TAG}"

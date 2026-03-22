@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"strings"
 
-	"github.com/aipartnerup/unirelease/internal/config"
-	"github.com/aipartnerup/unirelease/internal/pipeline"
-	"github.com/aipartnerup/unirelease/internal/runner"
-	"github.com/aipartnerup/unirelease/internal/ui"
+	"github.com/aiperceivable/unirelease/internal/config"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/runner"
+	"github.com/aiperceivable/unirelease/internal/ui"
 )
 
 // mockRunner records commands without executing them.

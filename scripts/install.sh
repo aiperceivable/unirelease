@@ -7,7 +7,7 @@ set -euo pipefail
 #   ./scripts/install.sh
 #
 # Remote install (for end users):
-#   curl -sSL https://raw.githubusercontent.com/aipartnerup/unirelease/main/scripts/install.sh | bash
+#   curl -sSL https://raw.githubusercontent.com/aiperceivable/unirelease/main/scripts/install.sh | bash
 #   curl -sSL ... | bash -s -- v0.1.0
 
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
@@ -59,7 +59,7 @@ if [ -n "$LOCAL_BINARY" ]; then
 else
   # Remote download
   VERSION="${1:-latest}"
-  REPO="aipartnerup/unirelease"
+  REPO="aiperceivable/unirelease"
 
   if [ "$VERSION" = "latest" ]; then
     DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download/${BINARY}"

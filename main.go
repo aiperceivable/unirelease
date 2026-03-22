@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/aipartnerup/unirelease/cmd"
+	"github.com/aiperceivable/unirelease/cmd"
 )
 
 // version is set by -ldflags at build time.

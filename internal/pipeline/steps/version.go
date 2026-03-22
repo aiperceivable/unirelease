@@ -3,8 +3,8 @@ package steps
 import (
 	"fmt"
 
-	"github.com/aipartnerup/unirelease/internal/detector"
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/detector"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 type ReadVersionStep struct{}

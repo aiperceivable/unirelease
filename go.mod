@@ -1,4 +1,4 @@
-module github.com/aipartnerup/unirelease
+module github.com/aiperceivable/unirelease
 
 go 1.25.0
 

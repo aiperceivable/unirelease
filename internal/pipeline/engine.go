@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/aipartnerup/unirelease/internal/git"
-	gh "github.com/aipartnerup/unirelease/internal/github"
-	"github.com/aipartnerup/unirelease/internal/ui"
+	"github.com/aiperceivable/unirelease/internal/git"
+	gh "github.com/aiperceivable/unirelease/internal/github"
+	"github.com/aiperceivable/unirelease/internal/ui"
 )
 
 // Engine orchestrates pipeline execution.

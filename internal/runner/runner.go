@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/aipartnerup/unirelease/internal/ui"
+	"github.com/aiperceivable/unirelease/internal/ui"
 )
 
 // Runner executes external commands with dry-run support.

@@ -7,13 +7,13 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/aipartnerup/unirelease/internal/config"
-	"github.com/aipartnerup/unirelease/internal/detector"
-	"github.com/aipartnerup/unirelease/internal/pipeline"
-	"github.com/aipartnerup/unirelease/internal/pipeline/steps"
-	"github.com/aipartnerup/unirelease/internal/providers"
-	"github.com/aipartnerup/unirelease/internal/runner"
-	"github.com/aipartnerup/unirelease/internal/ui"
+	"github.com/aiperceivable/unirelease/internal/config"
+	"github.com/aiperceivable/unirelease/internal/detector"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/pipeline/steps"
+	"github.com/aiperceivable/unirelease/internal/providers"
+	"github.com/aiperceivable/unirelease/internal/runner"
+	"github.com/aiperceivable/unirelease/internal/ui"
 	"github.com/spf13/cobra"
 )
 

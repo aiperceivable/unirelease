@@ -8,10 +8,10 @@ Unified release pipeline for multi-language projects. One command to detect, bui
 
 ```bash
 # One-line installer (auto-detects OS/arch)
-curl -sSL https://raw.githubusercontent.com/aipartnerup/unirelease/main/scripts/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/aiperceivable/unirelease/main/scripts/install.sh | bash
 
 # Or via Go
-go install github.com/aipartnerup/unirelease@latest
+go install github.com/aiperceivable/unirelease@latest
 ```
 
 Also available as pre-built binaries and Docker. See [docs/releasing.md](docs/releasing.md) for all methods + CI/CD integration.

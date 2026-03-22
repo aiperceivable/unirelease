@@ -1,7 +1,7 @@
 package steps
 
 import (
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 type VerifyStep struct{}

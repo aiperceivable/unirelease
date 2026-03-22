@@ -3,8 +3,8 @@ package steps
 import (
 	"fmt"
 
-	"github.com/aipartnerup/unirelease/internal/git"
-	"github.com/aipartnerup/unirelease/internal/pipeline"
+	"github.com/aiperceivable/unirelease/internal/git"
+	"github.com/aiperceivable/unirelease/internal/pipeline"
 )
 
 type CheckGitStatusStep struct{}

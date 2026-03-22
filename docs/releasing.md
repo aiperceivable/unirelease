@@ -46,10 +46,10 @@ One-line installer for end users. Auto-detects OS and architecture:
 
 ```bash
 # Latest version
-curl -sSL https://raw.githubusercontent.com/aipartnerup/unirelease/main/scripts/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/aiperceivable/unirelease/main/scripts/install.sh | bash
 
 # Specific version
-curl -sSL https://raw.githubusercontent.com/aipartnerup/unirelease/main/scripts/install.sh | bash -s -- v0.1.0
+curl -sSL https://raw.githubusercontent.com/aiperceivable/unirelease/main/scripts/install.sh | bash -s -- v0.1.0
 
 # Custom install directory
 INSTALL_DIR=~/.local/bin curl -sSL .../install.sh | bash
@@ -109,26 +109,26 @@ Triggered when you push a `v*` tag:
 ### Go install
 
 ```bash
-go install github.com/aipartnerup/unirelease@latest
+go install github.com/aiperceivable/unirelease@latest
 ```
 
 ### One-line installer
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/aipartnerup/unirelease/main/scripts/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/aiperceivable/unirelease/main/scripts/install.sh | bash
 ```
 
 ### Download binary
 
-From [GitHub Releases](https://github.com/aipartnerup/unirelease/releases):
+From [GitHub Releases](https://github.com/aiperceivable/unirelease/releases):
 
 ```bash
 # macOS (Apple Silicon)
-curl -Lo unirelease https://github.com/aipartnerup/unirelease/releases/latest/download/unirelease-darwin-arm64
+curl -Lo unirelease https://github.com/aiperceivable/unirelease/releases/latest/download/unirelease-darwin-arm64
 chmod +x unirelease && sudo mv unirelease /usr/local/bin/
 
 # Linux
-curl -Lo unirelease https://github.com/aipartnerup/unirelease/releases/latest/download/unirelease-linux-amd64
+curl -Lo unirelease https://github.com/aiperceivable/unirelease/releases/latest/download/unirelease-linux-amd64
 chmod +x unirelease && sudo mv unirelease /usr/local/bin/
 ```
 
@@ -143,7 +143,7 @@ docker run --rm -e GITHUB_TOKEN="$TOKEN" -v "$(pwd):/project" -w /project unirel
 ### Build from source
 
 ```bash
-git clone https://github.com/aipartnerup/unirelease.git
+git clone https://github.com/aiperceivable/unirelease.git
 cd unirelease && go build -o unirelease . && ./unirelease --help
 ```
 
@@ -155,6 +155,6 @@ When releasing a new version of unirelease:
 
 1. Update `CHANGELOG.md` with the new version section
 2. Run: `./scripts/release.sh X.Y.Z`
-3. Verify: https://github.com/aipartnerup/unirelease/releases
+3. Verify: https://github.com/aiperceivable/unirelease/releases
 
 That's the whole process. The script handles everything else.
