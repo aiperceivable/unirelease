@@ -14,7 +14,7 @@ curl -sSL https://raw.githubusercontent.com/aiperceivable/unirelease/main/script
 go install github.com/aiperceivable/unirelease@latest
 ```
 
-Also available as pre-built binaries and Docker. See [docs/releasing.md](docs/releasing.md) for all methods + CI/CD integration.
+Also available as pre-built binaries. See [docs/releasing.md](docs/releasing.md) for all methods + CI/CD integration.
 
 ## Quick Start
 
@@ -268,6 +268,22 @@ go test ./internal/git/... -run Integration -v
 # Build
 go build -o unirelease .
 ```
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Getting Started](docs/getting-started.md) | Installation, first release, language examples, CI/CD |
+| [Tech Design](docs/unirelease/tech-design.md) | Architecture and design decisions |
+| [Releasing](docs/releasing.md) | Build, install, and CI/CD integration |
+| [Pipeline Engine](docs/features/pipeline-engine.md) | Step orchestration and execution model |
+| [CLI & Detector](docs/features/cli-detector.md) | CLI flags and project type detection |
+| [Config File](docs/features/config-file.md) | `.unirelease.toml` reference |
+| [Git & GitHub](docs/features/git-github.md) | Tag, release, and token resolution |
+| [Interactive UX](docs/features/interactive-ux.md) | Prompts, dry-run, and colored output |
+| [Rust Provider](docs/features/rust-provider.md) | Rust/Cargo specifics |
+| [Node & Bun Provider](docs/features/node-bun-provider.md) | Node.js/Bun specifics |
+| [Python Provider](docs/features/python-provider.md) | Python/PyPI specifics |
 
 ## License
 

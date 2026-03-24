@@ -1,0 +1,44 @@
+site_name: unirelease
+site_description: Unified release pipeline for multi-language projects
+repo_url: https://github.com/aiperceivable/unirelease
+repo_name: aiperceivable/unirelease
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Releasing: releasing.md
+  - Architecture:
+      - Tech Design: unirelease/tech-design.md
+      - Pipeline Engine: features/pipeline-engine.md
+  - CLI & Config:
+      - CLI & Detector: features/cli-detector.md
+      - Config File: features/config-file.md
+      - Interactive UX: features/interactive-ux.md
+  - Providers:
+      - Rust: features/rust-provider.md
+      - Node & Bun: features/node-bun-provider.md
+      - Python: features/python-provider.md
+  - Git & GitHub: features/git-github.md
+
+markdown_extensions:
+  - tables
+  - fenced_code
+  - codehilite

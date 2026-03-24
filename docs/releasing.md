@@ -132,14 +132,6 @@ curl -Lo unirelease https://github.com/aiperceivable/unirelease/releases/latest/
 chmod +x unirelease && sudo mv unirelease /usr/local/bin/
 ```
 
-### Docker
-
-```bash
-docker build -t unirelease .
-docker run --rm -v "$(pwd):/project" -w /project unirelease --dry-run
-docker run --rm -e GITHUB_TOKEN="$TOKEN" -v "$(pwd):/project" -w /project unirelease --yes
-```
-
 ### Build from source
 
 ```bash
