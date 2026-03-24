@@ -15,14 +15,6 @@ type mockRunner struct {
 	Commands []string
 }
 
-func (m *mockRunner) record(name string, args ...string) {
-	cmd := name
-	if len(args) > 0 {
-		cmd += " " + strings.Join(args, " ")
-	}
-	m.Commands = append(m.Commands, cmd)
-}
-
 func newTestUI() *ui.UI {
 	reader := bufio.NewReader(strings.NewReader(""))
 	return ui.NewWithReader(reader, false)

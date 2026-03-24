@@ -74,11 +74,6 @@ func (e *Engine) Run() error {
 					Status:      ui.StepStatusSkipped,
 				})
 			} else {
-				results = append(results, ui.StepResult{
-					Name:        step.Name(),
-					Description: step.Description(),
-					Status:      ui.StepStatusFailed,
-				})
 				return fmt.Errorf("step %s: %w", step.Name(), err)
 			}
 		} else {
