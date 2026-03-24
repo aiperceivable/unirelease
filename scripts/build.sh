@@ -1,19 +1,32 @@
 #!/bin/bash
 set -euo pipefail
 
-# Cross-compile unirelease for all supported platforms.
-# Usage: ./scripts/build.sh [version]
-#   version: optional, reads from VERSION file if not provided
+# Build unirelease binaries.
+# Usage:
+#   ./scripts/build.sh              Build for current platform only
+#   ./scripts/build.sh --all        Cross-compile for all platforms
+#   ./scripts/build.sh 1.2.3        Build current platform with version
+#   ./scripts/build.sh --all 1.2.3  Cross-compile all with version
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$ROOT_DIR"
 
-VERSION="${1:-$(cat VERSION 2>/dev/null || echo "dev")}"
+ALL_TARGETS=false
+VERSION=""
+
+for arg in "$@"; do
+  case "$arg" in
+    --all) ALL_TARGETS=true ;;
+    *)     VERSION="$arg" ;;
+  esac
+done
+
+VERSION="${VERSION:-$(cat VERSION 2>/dev/null || echo "dev")}"
 LDFLAGS="-s -w -X main.version=${VERSION}"
 DIST_DIR="dist"
 
-TARGETS=(
+ALL_PLATFORMS=(
   "linux/amd64"
   "linux/arm64"
   "darwin/amd64"
@@ -21,11 +34,20 @@ TARGETS=(
   "windows/amd64"
 )
 
-echo "==> Building unirelease v${VERSION}"
-echo ""
-
 rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
+
+if [ "$ALL_TARGETS" = true ]; then
+  echo "==> Building unirelease v${VERSION} (all platforms)"
+  echo ""
+  TARGETS=("${ALL_PLATFORMS[@]}")
+else
+  LOCAL_OS="$(go env GOOS)"
+  LOCAL_ARCH="$(go env GOARCH)"
+  echo "==> Building unirelease v${VERSION} (${LOCAL_OS}/${LOCAL_ARCH})"
+  echo ""
+  TARGETS=("${LOCAL_OS}/${LOCAL_ARCH}")
+fi
 
 for target in "${TARGETS[@]}"; do
   GOOS="${target%/*}"

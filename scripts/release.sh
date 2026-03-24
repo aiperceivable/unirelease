@@ -77,7 +77,7 @@ echo "  VERSION -> $VERSION"
 
 # --- Step 4: Build all platforms ---
 echo "[4/7] Cross-compiling..."
-bash "$SCRIPT_DIR/build.sh" "$VERSION"
+bash "$SCRIPT_DIR/build.sh" --all "$VERSION"
 
 # --- Step 5: Checksums ---
 echo "[5/7] Generating checksums..."
