@@ -2,7 +2,7 @@
 
 | Field        | Value                                      |
 |--------------|--------------------------------------------|
-| **Source**   | [Idea Draft](../ideas/unirelease/draft.md) |
+| **Source**   | Internal idea draft |
 | **Date**     | 2026-03-21                                 |
 | **Type**     | Multi-feature project                      |
 | **Features** | 8 sub-features across 3 phases             |

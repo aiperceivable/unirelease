@@ -27,6 +27,8 @@ nav:
   - Releasing: releasing.md
   - Architecture:
       - Tech Design: unirelease/tech-design.md
+      - Decomposition: decomposition.md
+      - Feature Overview: features/overview.md
       - Pipeline Engine: features/pipeline-engine.md
   - CLI & Config:
       - CLI & Detector: features/cli-detector.md
@@ -37,6 +39,8 @@ nav:
       - Node & Bun: features/node-bun-provider.md
       - Python: features/python-provider.md
   - Git & GitHub: features/git-github.md
+  - Development:
+      - Implementation Plan: plans/UNI-001-plan.md
 
 markdown_extensions:
   - tables

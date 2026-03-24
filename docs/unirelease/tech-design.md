@@ -5,7 +5,7 @@
 | **Status**       | Draft                                                        |
 | **Author**       | Architecture Team                                            |
 | **Created**      | 2026-03-21                                                   |
-| **Upstream**     | [Idea Draft](../../ideas/unirelease/draft.md), [Decomposition](../decomposition.md) |
+| **Upstream**     | [Decomposition](../decomposition.md) |
 | **Language**     | Go 1.22+                                                     |
 | **Components**   | 8 (UNI-001 through UNI-008)                                  |
 
