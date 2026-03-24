@@ -58,6 +58,7 @@ type detectAndResolveStep struct {
 
 func (s *detectAndResolveStep) Name() string        { return s.inner.Name() }
 func (s *detectAndResolveStep) Description() string { return s.inner.Description() }
+func (s *detectAndResolveStep) Help() string        { return s.inner.Help() }
 func (s *detectAndResolveStep) Destructive() bool   { return s.inner.Destructive() }
 
 func (s *detectAndResolveStep) Execute(ctx *pipeline.Context) error {

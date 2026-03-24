@@ -15,6 +15,12 @@ func (s *GitHubReleaseStep) Name() string        { return "github_release" }
 func (s *GitHubReleaseStep) Description() string  { return "Create GitHub Release" }
 func (s *GitHubReleaseStep) Destructive() bool    { return true }
 
+func (s *GitHubReleaseStep) Help() string {
+	return "Create a GitHub Release for the current tag with auto-generated release notes from CHANGELOG.md. " +
+		"Uploads binary assets if the provider produces them (e.g. Go cross-compiled binaries). " +
+		"Requires GITHUB_TOKEN or gh auth login. [DESTRUCTIVE] Creates public release."
+}
+
 func (s *GitHubReleaseStep) Execute(ctx *pipeline.Context) error {
 	// Resolve GitHub repo
 	remoteURL, err := git.RemoteURL(ctx.ProjectDir)

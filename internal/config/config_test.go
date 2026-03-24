@@ -112,7 +112,7 @@ func TestLoad_MalformedToml(t *testing.T) {
 
 func TestMerge_CLIOverridesConfig(t *testing.T) {
 	cfg := &Config{Type: "rust"}
-	cfg.Merge("node")
+	cfg.Merge("node", nil)
 	if cfg.Type != "node" {
 		t.Errorf("expected 'node', got %q", cfg.Type)
 	}
@@ -120,9 +120,36 @@ func TestMerge_CLIOverridesConfig(t *testing.T) {
 
 func TestMerge_CLIEmpty_KeepsConfig(t *testing.T) {
 	cfg := &Config{Type: "rust"}
-	cfg.Merge("")
+	cfg.Merge("", nil)
 	if cfg.Type != "rust" {
 		t.Errorf("expected 'rust', got %q", cfg.Type)
+	}
+}
+
+func TestMerge_CLISkip(t *testing.T) {
+	cfg := &Config{Skip: []string{"clean"}}
+	cfg.Merge("", []string{"publish", "test"})
+	if len(cfg.Skip) != 3 {
+		t.Errorf("expected 3 skip steps, got %d: %v", len(cfg.Skip), cfg.Skip)
+	}
+	if !cfg.HasSkip("clean") || !cfg.HasSkip("publish") || !cfg.HasSkip("test") {
+		t.Errorf("expected all three steps in skip list, got %v", cfg.Skip)
+	}
+}
+
+func TestMerge_CLISkipDedup(t *testing.T) {
+	cfg := &Config{Skip: []string{"clean", "test"}}
+	cfg.Merge("", []string{"clean", "publish"})
+	if len(cfg.Skip) != 3 {
+		t.Errorf("expected 3 skip steps (deduped), got %d: %v", len(cfg.Skip), cfg.Skip)
+	}
+}
+
+func TestMerge_CLISkipEmpty(t *testing.T) {
+	cfg := &Config{Skip: []string{"clean"}}
+	cfg.Merge("", nil)
+	if len(cfg.Skip) != 1 {
+		t.Errorf("expected 1 skip step, got %d", len(cfg.Skip))
 	}
 }
 

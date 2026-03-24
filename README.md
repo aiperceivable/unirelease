@@ -62,12 +62,14 @@ Steps marked as **destructive** (git_tag, github_release, publish) prompt for co
 unirelease [path] [flags]
 
 Flags:
-  --dry-run          Preview pipeline without executing
-  --step <name>      Run only a specific step
-  --type <type>      Override auto-detection (rust|go|node|bun|python)
-  -v, --version           Print version
+  --dry-run              Preview pipeline without executing
+  --step <name>          Run only a specific step
+  --skip <steps>         Steps to skip (comma-separated, e.g. --skip publish,test)
+  --list-steps           Show detailed descriptions of all pipeline steps
+  --type <type>          Override auto-detection (rust|go|node|bun|python)
+  -v, --version          Print version
   -V, --set-version <X.Y.Z>  Override detected version
-  -y, --yes          Non-interactive mode (skip confirmations)
+  -y, --yes              Non-interactive mode (skip confirmations)
 ```
 
 ### Examples
@@ -84,6 +86,12 @@ unirelease --set-version 2.0.0
 
 # Run only the build step
 unirelease --step build
+
+# Skip specific steps from CLI
+unirelease --skip publish,test
+
+# Show detailed help for all steps
+unirelease --list-steps
 
 # Force project type (useful for monorepos)
 unirelease --type rust
@@ -242,38 +250,10 @@ After the pipeline completes, unirelease displays a summary with:
   Release complete!
 ```
 
-## Project Structure
-
-```
-unirelease/
-├── cmd/root.go                    # CLI entry point (Cobra)
-├── internal/
-│   ├── changelog/                 # CHANGELOG.md parser
-│   ├── config/                    # .unirelease.toml loader
-│   ├── detector/                  # Project type & version detection
-│   ├── git/                       # Git operations (tag, push, status)
-│   ├── github/                    # GitHub API client (go-github)
-│   ├── pipeline/
-│   │   ├── engine.go              # Pipeline orchestrator
-│   │   ├── context.go             # Provider interface & shared context
-│   │   └── steps/                 # 11 pipeline step implementations
-│   ├── providers/                 # Language-specific providers
-│   │   ├── rust.go
-│   │   ├── go.go
-│   │   ├── node.go
-│   │   ├── bun.go
-│   │   └── python.go
-│   ├── runner/                    # Command executor (dry-run aware)
-│   └── ui/                        # Colored output & interactive prompts
-├── e2e_test.go                    # End-to-end pipeline tests
-├── go.mod
-└── main.go
-```
-
 ## Development
 
 ```bash
-# Run all tests (183 tests across 10 packages)
+# Run all tests
 go test ./...
 
 # Run with verbose output

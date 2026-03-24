@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.2.0] - 2026-03-24
+
+### Added
+- `--skip` CLI flag to skip pipeline steps from the command line (comma-separated, e.g. `--skip publish,test`), merged with config `skip` list with deduplication
+- `--list-steps` CLI flag to show detailed descriptions of all pipeline steps
+- `Help()` method on `Step` interface providing per-step documentation (what it does, per-language commands, prerequisites, hooks, destructive warnings)
+- Available steps summary in `--help` output, auto-generated from step definitions
+- `StepInfo` / `StepInfoList` for programmatic step metadata access
+
+### Changed
+- Skip message in pipeline output changed from "skipped by config" to "skipped" (source-agnostic)
+- `Config.Merge()` now accepts `cliSkip` parameter for CLI skip merge
+- Consolidated step list into single `buildAllSteps()` function (was duplicated 3x)
+- Help text and step validation now derived from step definitions (single source of truth)
+
+### Fixed
+- `StepNames` in `pipeline/step.go` was missing `"verify"` step
+
 ## [0.1.1] - 2026-03-22
 
 ### Changed

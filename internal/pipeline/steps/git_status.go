@@ -13,6 +13,11 @@ func (s *CheckGitStatusStep) Name() string        { return "check_git_status" }
 func (s *CheckGitStatusStep) Description() string  { return "Check git status" }
 func (s *CheckGitStatusStep) Destructive() bool    { return false }
 
+func (s *CheckGitStatusStep) Help() string {
+	return "Verify the git working tree is clean and show the current branch. " +
+		"If uncommitted changes are detected, prompts for confirmation (use --yes to skip)."
+}
+
 func (s *CheckGitStatusStep) Execute(ctx *pipeline.Context) error {
 	clean, output, err := git.Status(ctx.ProjectDir)
 	if err != nil {

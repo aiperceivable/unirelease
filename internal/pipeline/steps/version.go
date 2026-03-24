@@ -13,6 +13,12 @@ func (s *ReadVersionStep) Name() string        { return "read_version" }
 func (s *ReadVersionStep) Description() string  { return "Read version" }
 func (s *ReadVersionStep) Destructive() bool    { return false }
 
+func (s *ReadVersionStep) Help() string {
+	return "Read the current version from the project manifest (e.g. Cargo.toml [package].version, " +
+		"package.json version, pyproject.toml [project].version, go build tags). " +
+		"Can be overridden with --set-version flag."
+}
+
 func (s *ReadVersionStep) Execute(ctx *pipeline.Context) error {
 	version, err := detector.ReadVersion(
 		ctx.ProjectDir,

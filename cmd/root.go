@@ -18,27 +18,65 @@ import (
 )
 
 var (
-	flagStep    string
-	flagYes     bool
-	flagDryRun  bool
-	flagVersion string
-	flagType    string
+	flagStep      string
+	flagSkip      []string
+	flagYes       bool
+	flagDryRun    bool
+	flagVersion   string
+	flagType      string
+	flagListSteps bool
 )
-
-// Valid pipeline step names.
-var validSteps = []string{
-	"detect", "read_version", "verify_env", "check_git_status",
-	"clean", "build", "test", "verify", "git_tag", "github_release", "publish",
-}
 
 var semverRegex = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 
+// buildAllSteps returns the canonical pipeline step list.
+func buildAllSteps() []pipeline.Step {
+	return []pipeline.Step{
+		&steps.DetectStep{},
+		&steps.ReadVersionStep{},
+		&steps.VerifyEnvStep{},
+		&steps.CheckGitStatusStep{},
+		&steps.CleanStep{},
+		&steps.BuildStep{},
+		&steps.TestStep{},
+		&steps.VerifyStep{},
+		&steps.GitTagStep{},
+		&steps.GitHubReleaseStep{},
+		&steps.PublishStep{},
+	}
+}
+
+// validStepNames returns the list of valid step names derived from buildAllSteps.
+func validStepNames() []string {
+	allSteps := buildAllSteps()
+	names := make([]string, len(allSteps))
+	for i, s := range allSteps {
+		names[i] = s.Name()
+	}
+	return names
+}
+
+// buildLongHelp generates the Long help text from the step list.
+func buildLongHelp() string {
+	var b strings.Builder
+	b.WriteString("Auto-detects project type (Rust, Node, Bun, Python, Go) and runs a unified release pipeline.\n")
+	b.WriteString("\nAvailable steps (in execution order):\n")
+	for i, step := range buildAllSteps() {
+		tag := ""
+		if step.Destructive() {
+			tag = " [destructive]"
+		}
+		fmt.Fprintf(&b, "  %2d. %-17s %s%s\n", i+1, step.Name(), step.Description(), tag)
+	}
+	b.WriteString("\nUse --list-steps for detailed descriptions of each step.")
+	return b.String()
+}
+
 var rootCmd = &cobra.Command{
-	Use:   "unirelease [path]",
-	Short: "Unified release pipeline for any project",
-	Long:  "Auto-detects project type (Rust, Node, Bun, Python, Go) and runs a unified release pipeline.",
-	Args:  cobra.MaximumNArgs(1),
-	RunE:  runRelease,
+	Use:           "unirelease [path]",
+	Short:         "Unified release pipeline for any project",
+	Args:          cobra.MaximumNArgs(1),
+	RunE:          runRelease,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }
@@ -49,11 +87,14 @@ func SetVersion(v string) {
 }
 
 func init() {
+	rootCmd.Long = buildLongHelp()
 	rootCmd.Flags().StringVar(&flagStep, "step", "", "Run only a specific pipeline step")
+	rootCmd.Flags().StringSliceVar(&flagSkip, "skip", nil, "Steps to skip (comma-separated, e.g. --skip publish,test)")
 	rootCmd.Flags().BoolVarP(&flagYes, "yes", "y", false, "Non-interactive mode (skip confirmations)")
 	rootCmd.Flags().BoolVar(&flagDryRun, "dry-run", false, "Preview pipeline without executing")
 	rootCmd.Flags().StringVarP(&flagVersion, "set-version", "V", "", "Override detected version (e.g. 1.2.3)")
 	rootCmd.Flags().StringVar(&flagType, "type", "", "Override auto-detection (rust|node|bun|python|go)")
+	rootCmd.Flags().BoolVar(&flagListSteps, "list-steps", false, "Show detailed descriptions of all pipeline steps")
 }
 
 func Execute() error {
@@ -93,17 +134,14 @@ func resolveProjectDir(args []string) (string, error) {
 
 // validateFlags validates all flag values before running the pipeline.
 func validateFlags() error {
-	if flagStep != "" {
-		valid := false
-		for _, s := range validSteps {
-			if flagStep == s {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			return fmt.Errorf("invalid step %q (valid: %s)", flagStep, strings.Join(validSteps, ", "))
-		}
+	names := validStepNames()
+	nameSet := make(map[string]bool, len(names))
+	for _, s := range names {
+		nameSet[s] = true
+	}
+
+	if flagStep != "" && !nameSet[flagStep] {
+		return fmt.Errorf("invalid step %q (valid: %s)", flagStep, strings.Join(names, ", "))
 	}
 
 	if flagType != "" {
@@ -124,6 +162,12 @@ func validateFlags() error {
 		}
 	}
 
+	for _, s := range flagSkip {
+		if !nameSet[s] {
+			return fmt.Errorf("invalid skip step %q (valid: %s)", s, strings.Join(names, ", "))
+		}
+	}
+
 	if flagVersion != "" && !semverRegex.MatchString(flagVersion) {
 		return fmt.Errorf("invalid version %q (expected format: X.Y.Z, e.g. 1.2.3)", flagVersion)
 	}
@@ -132,6 +176,12 @@ func validateFlags() error {
 }
 
 func runRelease(cmd *cobra.Command, args []string) error {
+	// List steps mode
+	if flagListSteps {
+		printStepDetails()
+		return nil
+	}
+
 	// Validate flags
 	if err := validateFlags(); err != nil {
 		return err
@@ -150,7 +200,7 @@ func runRelease(cmd *cobra.Command, args []string) error {
 	}
 
 	// Merge CLI flags into config
-	cfg.Merge(flagType)
+	cfg.Merge(flagType, flagSkip)
 
 	// Create UI
 	u := ui.New()
@@ -172,19 +222,7 @@ func runRelease(cmd *cobra.Command, args []string) error {
 	}
 
 	// Build step list
-	allSteps := []pipeline.Step{
-		&steps.DetectStep{},
-		&steps.ReadVersionStep{},
-		&steps.VerifyEnvStep{},
-		&steps.CheckGitStatusStep{},
-		&steps.CleanStep{},
-		&steps.BuildStep{},
-		&steps.TestStep{},
-		&steps.VerifyStep{},
-		&steps.GitTagStep{},
-		&steps.GitHubReleaseStep{},
-		&steps.PublishStep{},
-	}
+	allSteps := buildAllSteps()
 
 	// Wrap detect step to also resolve the provider after detection
 	wrappedSteps := make([]pipeline.Step, len(allSteps))
@@ -204,6 +242,7 @@ type detectAndResolveStep struct {
 
 func (s *detectAndResolveStep) Name() string        { return s.inner.Name() }
 func (s *detectAndResolveStep) Description() string  { return s.inner.Description() }
+func (s *detectAndResolveStep) Help() string         { return s.inner.Help() }
 func (s *detectAndResolveStep) Destructive() bool    { return s.inner.Destructive() }
 
 func (s *detectAndResolveStep) Execute(ctx *pipeline.Context) error {
@@ -227,4 +266,20 @@ func resolveProvider(ctx *pipeline.Context) error {
 	}
 	ctx.Provider = provider
 	return nil
+}
+
+func printStepDetails() {
+	infoList := pipeline.StepInfoList(buildAllSteps())
+
+	fmt.Println("Pipeline Steps:")
+	fmt.Println()
+	for i, info := range infoList {
+		marker := " "
+		if info.Destructive {
+			marker = "!"
+		}
+		fmt.Printf("  %2d. [%s] %-17s %s\n", i+1, marker, info.Name, info.Description)
+		fmt.Printf("      %s\n\n", info.Help)
+	}
+	fmt.Println("Legend: [!] = destructive (prompts for confirmation, use --yes to skip)")
 }

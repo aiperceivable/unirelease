@@ -12,6 +12,12 @@ func (s *BuildStep) Name() string        { return "build" }
 func (s *BuildStep) Description() string  { return "Build project" }
 func (s *BuildStep) Destructive() bool    { return false }
 
+func (s *BuildStep) Help() string {
+	return "Compile or package the project. " +
+		"Rust: cargo build --release. Node: npm run build. Bun: bun run build. Python: python -m build. Go: go build. " +
+		"Can be overridden with [commands].build in .unirelease.toml. Supports pre_build/post_build hooks."
+}
+
 func (s *BuildStep) Execute(ctx *pipeline.Context) error {
 	if ctx.Config != nil && ctx.Config.Commands.Build != "" {
 		ctx.UI.Info("Using custom build command: %s", ctx.Config.Commands.Build)

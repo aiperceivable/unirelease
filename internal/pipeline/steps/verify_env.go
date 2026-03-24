@@ -13,6 +13,11 @@ func (s *VerifyEnvStep) Name() string        { return "verify_env" }
 func (s *VerifyEnvStep) Description() string  { return "Verify environment" }
 func (s *VerifyEnvStep) Destructive() bool    { return false }
 
+func (s *VerifyEnvStep) Help() string {
+	return "Check that all required tools are installed for the detected project type. " +
+		"For example: cargo for Rust, npm/bun for Node/Bun, python+twine+build for Python, go for Go."
+}
+
 func (s *VerifyEnvStep) Execute(ctx *pipeline.Context) error {
 	if ctx.Provider == nil {
 		return fmt.Errorf("no provider set (detect step must run first)")

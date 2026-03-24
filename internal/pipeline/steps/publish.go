@@ -12,6 +12,13 @@ func (s *PublishStep) Name() string        { return "publish" }
 func (s *PublishStep) Description() string { return "Publish to registry" }
 func (s *PublishStep) Destructive() bool   { return true }
 
+func (s *PublishStep) Help() string {
+	return "Publish the package to its language registry. " +
+		"Rust: cargo publish (crates.io). Node: npm publish (npm). Python: twine upload (PyPI). " +
+		"Go: no-op (uses git tags). Checks if version already exists before publishing. " +
+		"Prompts for confirmation (use --yes to skip). Supports pre_publish/post_publish hooks. [DESTRUCTIVE]"
+}
+
 func (s *PublishStep) Execute(ctx *pipeline.Context) error {
 	// Pre-check: warn if version already exists on registry
 	exists, err := ctx.Provider.RegistryCheck(ctx)

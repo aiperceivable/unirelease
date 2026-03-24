@@ -65,9 +65,22 @@ func Load(projectDir string) (*Config, error) {
 }
 
 // Merge applies CLI flag overrides to the config.
-func (c *Config) Merge(cliType string) {
+func (c *Config) Merge(cliType string, cliSkip []string) {
 	if cliType != "" {
 		c.Type = cliType
+	}
+	if len(cliSkip) > 0 {
+		// Merge CLI skip with config skip, deduplicating
+		seen := make(map[string]bool, len(c.Skip))
+		for _, s := range c.Skip {
+			seen[s] = true
+		}
+		for _, s := range cliSkip {
+			if !seen[s] {
+				c.Skip = append(c.Skip, s)
+				seen[s] = true
+			}
+		}
 	}
 }
 

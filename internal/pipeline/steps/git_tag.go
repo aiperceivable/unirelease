@@ -13,6 +13,12 @@ func (s *GitTagStep) Name() string        { return "git_tag" }
 func (s *GitTagStep) Description() string  { return "Create git tag" }
 func (s *GitTagStep) Destructive() bool    { return true }
 
+func (s *GitTagStep) Help() string {
+	return "Create an annotated git tag (e.g. v1.2.3) and push it to the remote. " +
+		"Skips if the tag already exists on the remote. Prompts for confirmation (use --yes to skip). " +
+		"[DESTRUCTIVE] Pushes tag to remote."
+}
+
 func (s *GitTagStep) Execute(ctx *pipeline.Context) error {
 	tag := ctx.TagName
 

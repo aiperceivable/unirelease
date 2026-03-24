@@ -12,6 +12,12 @@ func (s *TestStep) Name() string        { return "test" }
 func (s *TestStep) Description() string  { return "Run tests" }
 func (s *TestStep) Destructive() bool    { return false }
 
+func (s *TestStep) Help() string {
+	return "Run the project's test suite. " +
+		"Rust: cargo test. Node: npm test. Bun: bun test. Python: pytest. Go: go test ./... " +
+		"Can be overridden with [commands].test in .unirelease.toml."
+}
+
 func (s *TestStep) Execute(ctx *pipeline.Context) error {
 	if ctx.Config != nil && ctx.Config.Commands.Test != "" {
 		ctx.UI.Info("Using custom test command: %s", ctx.Config.Commands.Test)

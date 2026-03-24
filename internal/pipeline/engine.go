@@ -42,7 +42,7 @@ func (e *Engine) Run() error {
 	for i, step := range e.steps {
 		// Check skip from config
 		if e.ctx.Config != nil && e.ctx.Config.HasSkip(step.Name()) {
-			e.ctx.UI.StepSkip(step.Name(), "skipped by config")
+			e.ctx.UI.StepSkip(step.Name(), "skipped")
 			results = append(results, ui.StepResult{
 				Name:        step.Name(),
 				Description: step.Description(),

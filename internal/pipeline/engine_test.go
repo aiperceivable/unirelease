@@ -23,6 +23,7 @@ type mockStep struct {
 
 func (s *mockStep) Name() string        { return s.name }
 func (s *mockStep) Description() string  { return s.desc }
+func (s *mockStep) Help() string         { return "mock help" }
 func (s *mockStep) Destructive() bool    { return s.destructive }
 
 func (s *mockStep) Execute(ctx *Context) error {
