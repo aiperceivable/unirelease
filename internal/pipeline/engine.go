@@ -30,6 +30,19 @@ func (e *Engine) Run() error {
 	if e.ctx.Step != "" {
 		for i, step := range e.steps {
 			if step.Name() == e.ctx.Step {
+				// Run all prerequisite steps (before the target) to initialize context.
+				// This ensures provider, version, and other metadata are available.
+				for j := 0; j < i; j++ {
+					if e.ctx.DryRun {
+						if err := e.steps[j].DryRun(e.ctx); err != nil {
+							return fmt.Errorf("prerequisite step %s: %w", e.steps[j].Name(), err)
+						}
+					} else {
+						if err := e.steps[j].Execute(e.ctx); err != nil {
+							return fmt.Errorf("prerequisite step %s: %w", e.steps[j].Name(), err)
+						}
+					}
+				}
 				return e.executeStep(i, step)
 			}
 		}
