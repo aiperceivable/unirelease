@@ -67,6 +67,8 @@ Flags:
   --skip <steps>         Steps to skip (comma-separated, e.g. --skip publish,test)
   --list-steps           Show detailed descriptions of all pipeline steps
   --type <type>          Override auto-detection (rust|go|node|bun|python)
+  --otp <code>           One-time password for registry publish (e.g. npm 2FA)
+  --publish-args <args>  Additional publish arguments (comma-separated)
   -v, --version          Print version
   -V, --set-version <X.Y.Z>  Override detected version
   -y, --yes              Non-interactive mode (skip confirmations)
@@ -95,6 +97,12 @@ unirelease --list-steps
 
 # Force project type (useful for monorepos)
 unirelease --type rust
+
+# Publish with OTP (npm 2FA)
+unirelease --step publish --otp 123456
+
+# Pass extra publish args
+unirelease --publish-args --tag,beta
 
 # CI/CD: fully automated, no prompts
 unirelease --yes

@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.3.0] - 2026-03-31
+
+### Added
+- `--otp` CLI flag for passing one-time passwords to registry publish (e.g. `npm publish --otp`)
+- `--publish-args` CLI flag for passing additional arguments to the publish command (comma-separated, e.g. `--publish-args --tag,beta`)
+- `RunSensitive()` method on Runner, masking sensitive arguments (e.g. OTP) in command logs
+- `Runner` interface in `pipeline.Context` replacing concrete `*runner.Runner`, enabling mock-based unit testing of providers
+- MkDocs documentation site with `mkdocs.yml` and `deploy-docs.yml` GitHub Actions workflow
+- `--all` flag in `build.sh` for targeted platform builds (e.g. `./build.sh --all linux`)
+- `getting-started.md` guide covering installation, first release, language examples, and CI/CD integration
+
+### Fixed
+- **Nil pointer crash** when using `--step` to run a single step (e.g. `--step publish`): prerequisite steps now run automatically to initialize provider, version, and other context metadata
+- Commands spawned by Runner now connect `os.Stdin`, allowing interactive prompts (e.g. npm OTP input) to work
+
+### Changed
+- Single-step mode (`--step`) now executes all prerequisite steps before the target step, respecting `--dry-run`
+- Command logging now quotes arguments containing spaces for readability
+- Removed `Dockerfile` (replaced by binary distribution)
+- Removed unused code: `isBunBinary` function, `mockRunner.record` method, redundant UI step failure reporting
+- Removed standalone `providers/provider.go` (interface moved to `pipeline/context.go`)
+
 ## [0.2.0] - 2026-03-24
 
 ### Added
