@@ -46,7 +46,9 @@ func (p *RustProvider) Test(ctx *pipeline.Context) error {
 }
 
 func (p *RustProvider) Publish(ctx *pipeline.Context) error {
-	_, err := ctx.Runner.Run("cargo", "publish")
+	args := []string{"publish"}
+	args = append(args, ctx.PublishArgs...)
+	_, err := ctx.Runner.Run("cargo", args...)
 	return err
 }
 

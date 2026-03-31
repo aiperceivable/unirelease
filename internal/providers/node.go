@@ -84,7 +84,14 @@ func (p *NodeProvider) Test(ctx *pipeline.Context) error {
 }
 
 func (p *NodeProvider) Publish(ctx *pipeline.Context) error {
-	_, err := ctx.Runner.Run("npm", "publish", "--access", "public")
+	args := []string{"publish", "--access", "public"}
+	var maskIndices []int
+	if ctx.OTP != "" {
+		args = append(args, "--otp", ctx.OTP)
+		maskIndices = append(maskIndices, len(args)-1)
+	}
+	args = append(args, ctx.PublishArgs...)
+	_, err := ctx.Runner.RunSensitive(maskIndices, "npm", args...)
 	return err
 }
 

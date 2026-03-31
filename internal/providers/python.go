@@ -122,6 +122,7 @@ func (p *PythonProvider) Publish(ctx *pipeline.Context) error {
 	}
 
 	args := append([]string{"upload"}, files...)
+	args = append(args, ctx.PublishArgs...)
 	_, err := ctx.Runner.Run("twine", args...)
 	return err
 }

@@ -24,7 +24,26 @@ func New(dir string, dryRun bool, u *ui.UI) *Runner {
 // Run executes a command, printing it first.
 // In dry-run mode, prints the command but does not execute it.
 func (r *Runner) Run(name string, args ...string) (string, error) {
-	cmdStr := name + " " + strings.Join(args, " ")
+	return r.RunSensitive(nil, name, args...)
+}
+
+// RunSensitive executes a command, masking arguments at the specified indices in the output.
+func (r *Runner) RunSensitive(maskIndices []int, name string, args ...string) (string, error) {
+	maskMap := make(map[int]bool)
+	for _, idx := range maskIndices {
+		maskMap[idx] = true
+	}
+
+	displayArgs := make([]string, len(args))
+	for i, arg := range args {
+		if maskMap[i] {
+			displayArgs[i] = "********"
+		} else {
+			displayArgs[i] = arg
+		}
+	}
+
+	cmdStr := formatCommand(name, displayArgs)
 
 	if r.DryRun {
 		r.UI.DryRunMsg("Would run: %s", cmdStr)
@@ -34,6 +53,7 @@ func (r *Runner) Run(name string, args ...string) (string, error) {
 	r.UI.Command(cmdStr)
 	cmd := exec.Command(name, args...)
 	cmd.Dir = r.Dir
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
@@ -41,6 +61,23 @@ func (r *Runner) Run(name string, args ...string) (string, error) {
 		return "", fmt.Errorf("command failed: %s: %w", cmdStr, err)
 	}
 	return "", nil
+}
+
+// formatCommand formats a command and its arguments for display, quoting args with spaces.
+func formatCommand(name string, args []string) string {
+	parts := make([]string, len(args)+1)
+	parts[0] = quoteIfNecessary(name)
+	for i, arg := range args {
+		parts[i+1] = quoteIfNecessary(arg)
+	}
+	return strings.Join(parts, " ")
+}
+
+func quoteIfNecessary(s string) string {
+	if strings.Contains(s, " ") || s == "" {
+		return "\"" + strings.ReplaceAll(s, "\"", "\\\"") + "\""
+	}
+	return s
 }
 
 // RunSilent executes a command and captures output (no printing).

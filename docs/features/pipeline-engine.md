@@ -108,7 +108,7 @@ type PipelineContext struct {
     DryRun      bool
     Yes         bool
     Step        string // if non-empty, run only this step
-    Runner      *runner.Runner
+    Runner      Runner // interface: Run, RunSensitive, RunSilent
     UI          *ui.UI
     GitHubRepo  string
     GitHubToken string

@@ -25,6 +25,8 @@ var (
 	flagVersion   string
 	flagType      string
 	flagListSteps bool
+	flagOTP       string
+	flagPubArgs   []string
 )
 
 var semverRegex = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
@@ -95,6 +97,8 @@ func init() {
 	rootCmd.Flags().StringVarP(&flagVersion, "set-version", "V", "", "Override detected version (e.g. 1.2.3)")
 	rootCmd.Flags().StringVar(&flagType, "type", "", "Override auto-detection (rust|node|bun|python|go)")
 	rootCmd.Flags().BoolVar(&flagListSteps, "list-steps", false, "Show detailed descriptions of all pipeline steps")
+	rootCmd.Flags().StringVar(&flagOTP, "otp", "", "One-time password for registry publish (e.g. npm publish --otp)")
+	rootCmd.Flags().StringSliceVar(&flagPubArgs, "publish-args", nil, "Additional arguments for the publish command (comma-separated)")
 }
 
 func Execute() error {
@@ -219,6 +223,8 @@ func runRelease(cmd *cobra.Command, args []string) error {
 		Runner:          r,
 		UI:              u,
 		TypeOverride:    flagType,
+		OTP:             flagOTP,
+		PublishArgs:     flagPubArgs,
 	}
 
 	// Build step list

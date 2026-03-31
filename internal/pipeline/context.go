@@ -2,7 +2,6 @@ package pipeline
 
 import (
 	"github.com/aiperceivable/unirelease/internal/config"
-	"github.com/aiperceivable/unirelease/internal/runner"
 	"github.com/aiperceivable/unirelease/internal/ui"
 )
 
@@ -21,6 +20,13 @@ type Provider interface {
 	RegistryCheck(ctx *Context) (exists bool, err error)
 }
 
+// Runner defines the contract for executing external commands.
+type Runner interface {
+	Run(name string, args ...string) (string, error)
+	RunSensitive(maskIndices []int, name string, args ...string) (string, error)
+	RunSilent(name string, args ...string) (string, error)
+}
+
 // Context carries shared state through the pipeline.
 type Context struct {
 	ProjectDir      string
@@ -33,11 +39,13 @@ type Context struct {
 	DryRun          bool
 	Yes             bool
 	Step            string // if non-empty, run only this step
-	Runner          *runner.Runner
+	Runner          Runner
 	UI              *ui.UI
 	GitHubRepo      string
 	GitHubToken     string
 	TypeOverride    string
+	OTP             string   // one-time password for registry publish
+	PublishArgs     []string // additional arguments for the publish command
 }
 
 // FormatTag applies the tag prefix to the version.

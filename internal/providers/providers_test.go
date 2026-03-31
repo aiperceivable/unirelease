@@ -3,6 +3,7 @@ package providers
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/aiperceivable/unirelease/internal/pipeline"
@@ -47,6 +48,19 @@ func TestRustPublish_DryRun(t *testing.T) {
 	}
 }
 
+func TestRustPublish_Args(t *testing.T) {
+	dir := t.TempDir()
+	ctx, mock := newMockContext(dir)
+	ctx.PublishArgs = []string{"--token", "secret"}
+
+	p := &RustProvider{}
+	p.Publish(ctx)
+
+	if !strings.Contains(mock.Commands[0], "cargo publish --token secret") {
+		t.Errorf("unexpected command: %q", mock.Commands[0])
+	}
+}
+
 // --- Node Provider Operation Tests ---
 
 func TestNodeClean_RemovesDirs(t *testing.T) {
@@ -85,6 +99,35 @@ func TestNodePublish_DryRun(t *testing.T) {
 	p := &NodeProvider{}
 	if err := p.Publish(ctx); err != nil {
 		t.Errorf("unexpected error: %v", err)
+	}
+}
+
+func TestNodePublish_Args(t *testing.T) {
+	dir := t.TempDir()
+	ctx, mock := newMockContext(dir)
+	ctx.OTP = "123456"
+	ctx.PublishArgs = []string{"--tag", "beta"}
+
+	p := &NodeProvider{}
+	p.Publish(ctx)
+
+	if len(mock.Commands) != 1 {
+		t.Fatalf("expected 1 command, got %d", len(mock.Commands))
+	}
+	cmd := mock.Commands[0]
+	// name is npm, args are [publish --access public --otp 123456 --tag beta]
+	if !strings.Contains(cmd, "npm publish --access public --otp 123456 --tag beta") {
+		t.Errorf("unexpected command: %q", cmd)
+	}
+	// Verify OTP masking index:
+	// args[0] = publish
+	// args[1] = --access
+	// args[2] = public
+	// args[3] = --otp
+	// args[4] = 123456
+	masks := mock.Masks[0]
+	if len(masks) != 1 || masks[0] != 4 {
+		t.Errorf("expected mask index 4, got %v", masks)
 	}
 }
 
@@ -238,6 +281,23 @@ func TestPythonPublish_NoDistFiles(t *testing.T) {
 	err := p.Publish(ctx)
 	if err == nil {
 		t.Fatal("expected error for empty dist/")
+	}
+}
+
+func TestPythonPublish_Args(t *testing.T) {
+	dir := t.TempDir()
+	os.MkdirAll(filepath.Join(dir, "dist"), 0755)
+	os.WriteFile(filepath.Join(dir, "dist", "pkg.whl"), []byte(""), 0644)
+
+	ctx, mock := newMockContext(dir)
+	ctx.DryRun = false // need real mode to test the glob
+	ctx.PublishArgs = []string{"--repository", "testpypi"}
+
+	p := &PythonProvider{}
+	p.Publish(ctx)
+
+	if !strings.Contains(mock.Commands[0], "twine upload") || !strings.Contains(mock.Commands[0], "--repository testpypi") {
+		t.Errorf("unexpected command: %q", mock.Commands[0])
 	}
 }
 
