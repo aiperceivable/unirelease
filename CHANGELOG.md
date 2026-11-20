@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.3.1] - 2026-11-18
+
+### Changed
+
+- Update `golang.org/x/sys` to 0.44.0. No functional changes.
+
 ## [0.3.0] - 2026-03-31
 
 ### Added
